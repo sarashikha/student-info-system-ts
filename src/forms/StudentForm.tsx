@@ -1,154 +1,107 @@
 import { useEffect, useState } from 'react';
-import {
-  Button,
-  TextField,
-  Stack,
-  MenuItem,
-  Snackbar,
-  Alert
-} from '@mui/material';
+import { TextField, Button, Stack, Snackbar, MenuItem } from '@mui/material';
 import { Student } from '../models/Student';
 import { storageService } from '../services/storageService';
 
 interface Props {
-  selectedStudent?: Student;
+  selected?: Student;
   onSave: () => void;
 }
 
-export default function StudentForm({ selectedStudent, onSave }: Props) {
-  const [student, setStudent] = useState<Student>({
-    id: '',
-    fullName: '',
-    email: '',
-    status: 'active'
-  });
+export default function StudentForm({ selected, onSave }: Props) {
+  const [id, setId] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'פעיל' | 'סיים'>('פעיל');
+  const [open, setOpen] = useState(false);
 
-  const [errors, setErrors] = useState({
-    id: '',
-    fullName: '',
-    email: ''
-  });
+  const students = storageService.get<Student>('students');
 
-  const [success, setSuccess] = useState(false);
+  const isDuplicate =
+    !selected && students.some(s => s.id === id);
+
+  const valid =
+    id.trim() !== '' &&
+    fullName.trim() !== '' &&
+    email.includes('@') &&
+    !isDuplicate;
 
   useEffect(() => {
-    if (selectedStudent) {
-      setStudent(selectedStudent);
+    if (selected) {
+      setId(selected.id);
+      setFullName(selected.fullName);
+      setEmail(selected.email);
+      setStatus(selected.status);
     }
-  }, [selectedStudent]);
+  }, [selected]);
 
-  const validateEmail = (email: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const save = () => {
+    let list = students;
 
-  const validate = () => {
-    const newErrors = { id: '', fullName: '', email: '' };
-    let valid = true;
-
-    if (!student.id.trim()) {
-      newErrors.id = 'ת"ז הוא שדה חובה';
-      valid = false;
+    if (selected) {
+      const i = list.findIndex(s => s.id === selected.id);
+      list[i] = { ...selected, fullName, email, status };
     } else {
-      const students = storageService.get<Student>('students');
-      const exists = students.some(
-        s => s.id === student.id && s.id !== selectedStudent?.id
-      );
-      if (exists) {
-        newErrors.id = 'ת"ז כבר קיימת במערכת';
-        valid = false;
-      }
+      list.push({
+        id,
+        fullName,
+        email,
+        status,
+        courseIds: []
+      });
     }
 
-    if (!student.fullName.trim()) {
-      newErrors.fullName = 'שם מלא הוא שדה חובה';
-      valid = false;
-    }
-
-    if (!validateEmail(student.email)) {
-      newErrors.email = 'כתובת מייל לא תקינה';
-      valid = false;
-    }
-
-    setErrors(newErrors);
-    return valid;
-  };
-
-  const handleSubmit = () => {
-    if (!validate()) return;
-
-    if (selectedStudent) {
-      storageService.update<Student>('students', student);
-    } else {
-      storageService.add<Student>('students', student);
-    }
-
-    setSuccess(true);
+    storageService.set('students', list);
+    setOpen(true);
     onSave();
-
-    setStudent({
-      id: '',
-      fullName: '',
-      email: '',
-      status: 'active'
-    });
   };
 
   return (
-    <Stack spacing={2} sx={{ maxWidth: 400 }}>
+    <Stack spacing={2}>
       <TextField
         label="תעודת זהות"
-        value={student.id}
+        value={id}
         required
-        error={!!errors.id}
-        helperText={errors.id}
-        onChange={e => setStudent({ ...student, id: e.target.value })}
-        disabled={!!selectedStudent}
+        disabled={!!selected}
+        error={isDuplicate}
+        helperText={isDuplicate ? 'ת״ז כבר קיימת' : ''}
+        onChange={e => setId(e.target.value)}
       />
 
       <TextField
         label="שם מלא"
-        value={student.fullName}
+        value={fullName}
         required
-        error={!!errors.fullName}
-        helperText={errors.fullName}
-        onChange={e => setStudent({ ...student, fullName: e.target.value })}
+        onChange={e => setFullName(e.target.value)}
       />
 
       <TextField
-        label="מייל"
-        value={student.email}
+        label="אימייל"
+        value={email}
         required
-        error={!!errors.email}
-        helperText={errors.email}
-        onChange={e => setStudent({ ...student, email: e.target.value })}
+        onChange={e => setEmail(e.target.value)}
       />
 
       <TextField
         select
         label="סטטוס"
-        value={student.status}
-        onChange={e =>
-          setStudent({ ...student, status: e.target.value as any })
-        }
+        value={status}
+        onChange={e => setStatus(e.target.value as any)}
       >
-        <MenuItem value="active">פעיל</MenuItem>
-        <MenuItem value="finished">סיים</MenuItem>
+        <MenuItem value="פעיל">פעיל</MenuItem>
+        <MenuItem value="סיים">סיים</MenuItem>
       </TextField>
 
-      <Button
-        variant="contained"
-        onClick={handleSubmit}
-        disabled={!student.id || !student.fullName || !student.email}
-      >
+      <Button disabled={!valid} variant="contained" onClick={save}>
         שמירה
       </Button>
 
       <Snackbar
-        open={success}
+        open={open}
         autoHideDuration={3000}
-        onClose={() => setSuccess(false)}
-      >
-        <Alert severity="success">הסטודנט נשמר בהצלחה</Alert>
-      </Snackbar>
+        message="סטודנט נשמר בהצלחה"
+        onClose={() => setOpen(false)}
+      />
     </Stack>
   );
 }
