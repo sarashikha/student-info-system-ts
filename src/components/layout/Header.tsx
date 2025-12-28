@@ -1,14 +1,20 @@
-
-import { AppBar, Toolbar, Typography } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { AppBar, Toolbar, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
-  const nav = useNavigate()
+  const nav = useNavigate();
+
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" sx={{cursor:'pointer'}} onClick={()=>nav('/')}>Student Info System</Typography>
+        <Typography
+          variant="h6"
+          sx={{ cursor: 'pointer' }}
+          onClick={() => nav('/')}
+        >
+          Student Info System
+        </Typography>
       </Toolbar>
     </AppBar>
-  )
+  );
 }
