@@ -1,1 +1,1 @@
-# student-info-system-ts
+# Student Info System (React + TS + MUI)
