@@ -1,3 +1,4 @@
+import { initialCourses } from '../data/initialData';
 import { initialDegreeReqs } from '../data/initialData';
 
 export const storageService = {
@@ -10,6 +11,12 @@ export const storageService = {
   },
 
   init() {
+    // קורסים
+    if (!localStorage.getItem('courses')) {
+      localStorage.setItem('courses', JSON.stringify(initialCourses));
+    }
+
+    // דרישות תואר
     if (!localStorage.getItem('degreeReqs')) {
       localStorage.setItem('degreeReqs', JSON.stringify(initialDegreeReqs));
     }
