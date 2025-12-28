@@ -1,70 +1,56 @@
 import { useEffect, useState } from 'react';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-  Stack,
-  Typography
+  Table, TableHead, TableRow, TableCell,
+  TableBody, Button, Stack, Typography, Paper
 } from '@mui/material';
 import { Student } from '../../models/Student';
 import { storageService } from '../../services/storageService';
 import StudentForm from '../../forms/StudentForm';
 
 export default function StudentsAdmin() {
-  const [students, setStudents] = useState<Student[]>([]);
-  const [selectedStudent, setSelectedStudent] = useState<Student | undefined>();
+  const [list, setList] = useState<Student[]>([]);
+  const [selected, setSelected] = useState<Student>();
 
-  const loadStudents = () => {
-    setStudents(storageService.get<Student>('students'));
-    setSelectedStudent(undefined);
+  const load = () => {
+    setList(storageService.get<Student>('students'));
+    setSelected(undefined);
   };
 
-  useEffect(() => {
-    loadStudents();
-  }, []);
+  useEffect(load, []);
 
   return (
-    <Stack spacing={3} sx={{ p: 3 }}>
-      <Typography variant="h5">ניהול סטודנטים</Typography>
+    <Stack spacing={3}>
+      <Typography variant="h4">ניהול סטודנטים</Typography>
 
-      <StudentForm
-        selectedStudent={selectedStudent}
-        onSave={loadStudents}
-      />
-
-      <Paper>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ת"ז</TableCell>
-              <TableCell>שם</TableCell>
-              <TableCell>מייל</TableCell>
-              <TableCell>סטטוס</TableCell>
-              <TableCell>פעולות</TableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {students.map(student => (
-              <TableRow key={student.id}>
-                <TableCell>{student.id}</TableCell>
-                <TableCell>{student.fullName}</TableCell>
-                <TableCell>{student.email}</TableCell>
-                <TableCell>{student.status}</TableCell>
-                <TableCell>
-                  <Button onClick={() => setSelectedStudent(student)}>
-                    עריכה
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+      <Paper sx={{ p: 2 }}>
+        <StudentForm selected={selected} onSave={load} />
       </Paper>
+
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>ת"ז</TableCell>
+            <TableCell>שם</TableCell>
+            <TableCell>אימייל</TableCell>
+            <TableCell>סטטוס</TableCell>
+            <TableCell />
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {list.map(s => (
+            <TableRow key={s.id}>
+              <TableCell>{s.id}</TableCell>
+              <TableCell>{s.fullName}</TableCell>
+              <TableCell>{s.email}</TableCell>
+              <TableCell>{s.status}</TableCell>
+              <TableCell>
+                <Button onClick={() => setSelected(s)}>עריכה</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </Stack>
   );
 }
+
