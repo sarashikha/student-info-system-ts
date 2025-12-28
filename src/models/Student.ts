@@ -1,1 +1,6 @@
-export interface Student { id: string; fullName: string; email: string; status: 'active'|'finished'; courseIds: string[] }
+export interface Student {
+  id: string;          // ת"ז – ייחודי
+  fullName: string;    // שם מלא – חובה
+  email: string;       // מייל – חובה ותקין
+  status: 'active' | 'finished';
+}
