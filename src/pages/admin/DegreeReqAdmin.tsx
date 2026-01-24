@@ -1,14 +1,13 @@
-import AdminDesktopGuard from '../../components/admin/AdminDesktopGuard';
-import { Typography, Box } from '@mui/material';
+import { Typography } from '@mui/material';
+import AdminLayout from '../../components/admin/AdminLayout';
 
-export default function DegreeRequirementsAdmin() {
+export default function DegreeReqAdmin() {
   return (
-    <AdminDesktopGuard>
-      <Box>
-        <Typography variant="h5" gutterBottom>
-          Degree Requirements Management
-        </Typography>
-      </Box>
-    </AdminDesktopGuard>
+    <AdminLayout>
+      <Typography variant="h5">
+        Degree Requirements Management
+      </Typography>
+    </AdminLayout>
   );
 }
+

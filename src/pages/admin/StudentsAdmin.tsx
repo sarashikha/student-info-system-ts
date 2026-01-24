@@ -1,14 +1,13 @@
-import AdminDesktopGuard from '../../components/admin/AdminDesktopGuard';
-import { Typography, Box } from '@mui/material';
+import { Typography } from '@mui/material';
+import AdminLayout from '../../components/admin/AdminLayout';
 
 export default function StudentsAdmin() {
   return (
-    <AdminDesktopGuard>
-      <Box>
-        <Typography variant="h5" gutterBottom>
-          Students Management
-        </Typography>
-      </Box>
-    </AdminDesktopGuard>
+    <AdminLayout>
+      <Typography variant="h5">
+        Students Management
+      </Typography>
+    </AdminLayout>
   );
 }
+
