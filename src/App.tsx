@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { ThemeProvider, CssBaseline, Switch, Box } from '@mui/material';
+import { ThemeProvider, CssBaseline, Box } from '@mui/material';
 import { lightTheme, darkTheme } from './theme/theme';
-
 import Header from './components/layout/Header';
 import DrawerMenu from './components/layout/DrawerMenu';
 import AppRoutes from './routes/AppRoutes';
@@ -13,22 +12,17 @@ export default function App() {
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <CssBaseline />
 
-      <Header />
+      <Header
+        darkMode={darkMode}
+        onToggleDarkMode={() => setDarkMode(!darkMode)}
+      />
 
-      <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+      <Box sx={{ display: 'flex', mt: 8 }}>
         <DrawerMenu />
-
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          {/* מתג מעבר בין מצב בהיר לכהה */}
-          <Switch
-            checked={darkMode}
-            onChange={() => setDarkMode(!darkMode)}
-          />
-
           <AppRoutes />
         </Box>
       </Box>
     </ThemeProvider>
   );
 }
-

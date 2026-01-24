@@ -1,19 +1,24 @@
-import { AppBar, Toolbar, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Switch, Box } from '@mui/material';
 
-export default function Header() {
-  const nav = useNavigate();
+type HeaderProps = {
+  darkMode: boolean;
+  onToggleDarkMode: () => void;
+};
 
+export default function Header({ darkMode, onToggleDarkMode }: HeaderProps) {
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography
-          variant="h6"
-          sx={{ cursor: 'pointer' }}
-          onClick={() => nav('/')}
-        >
+    <AppBar position="fixed">
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography variant="h6">
           Student Info System
         </Typography>
+
+        <Box>
+          <Switch
+            checked={darkMode}
+            onChange={onToggleDarkMode}
+          />
+        </Box>
       </Toolbar>
     </AppBar>
   );
