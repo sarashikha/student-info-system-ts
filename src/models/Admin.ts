@@ -4,4 +4,3 @@ export interface Admin {
   email: string;
   role: string;
 }
-}
