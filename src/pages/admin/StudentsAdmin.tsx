@@ -16,62 +16,63 @@ import {
   DialogActions,
 } from "@mui/material";
 
-type Course = {
-  code: string;
+type Student = {
+  id: string;
   name: string;
+  email: string;
   status: string;
 };
 
-const STORAGE_KEY = "courses";
+const STORAGE_KEY = "students";
 
-const defaultCourses: Course[] = [
-  { code: "CS101", name: "Intro to Computer Science", status: "Active" },
-  { code: "CS102", name: "Data Structures", status: "Active" },
-  { code: "CS103", name: "Databases", status: "Inactive" },
+const defaultStudents: Student[] = [
+  { id: "123456789", name: "Ali Ahmad", email: "ali@gmail.com", status: "Active" },
+  { id: "987654321", name: "Sara Cohen", email: "sara@gmail.com", status: "Active" },
+  { id: "456789123", name: "Noor Hassan", email: "noor@gmail.com", status: "Inactive" },
 ];
 
-function CoursesAdmin() {
-  const [courses, setCourses] = useState<Course[]>([]);
+function StudentsAdmin() {
+  const [students, setStudents] = useState<Student[]>([]);
   const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState<Course | null>(null);
+  const [editing, setEditing] = useState<Student | null>(null);
 
   useEffect(() => {
     const data = localStorage.getItem(STORAGE_KEY);
     if (data) {
-      setCourses(JSON.parse(data));
+      setStudents(JSON.parse(data));
     } else {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultCourses));
-      setCourses(defaultCourses);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultStudents));
+      setStudents(defaultStudents);
     }
   }, []);
 
-  const saveToStorage = (list: Course[]) => {
-    setCourses(list);
+  const saveToStorage = (list: Student[]) => {
+    setStudents(list);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
   };
 
   const handleAdd = () => {
-    setEditing({ code: "", name: "", status: "" });
+    setEditing({ id: "", name: "", email: "", status: "" });
     setOpen(true);
   };
 
-  const handleEdit = (course: Course) => {
-    setEditing(course);
+  const handleEdit = (student: Student) => {
+    setEditing(student);
     setOpen(true);
   };
 
   const handleSave = () => {
     if (!editing) return;
 
-    let updated: Course[];
-    const exists = courses.find((c) => c.code === editing.code);
+    let updated: Student[];
+    const exists = students.find((s) => s.id === editing.id);
 
     if (exists) {
-      updated = courses.map((c) =>
-        c.code === editing.code ? editing : c
+      updated = students.map((s) =>
+        s.id === editing.id ? editing : s
       );
     } else {
-      updated = [...courses, editing];
+      updated = [...students, editing];
     }
 
     saveToStorage(updated);
@@ -81,40 +82,41 @@ function CoursesAdmin() {
   return (
     <Box p={3}>
       <Typography variant="h4" gutterBottom>
-        Courses Management
+        Students Management
       </Typography>
 
       <Button
         variant="contained"
-        color="primary"
         onClick={handleAdd}
         sx={{ mb: 2 }}
       >
-        Add Course
+        Add Student
       </Button>
 
       <Paper>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Code</TableCell>
+              <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
+              <TableCell>Email</TableCell>
               <TableCell>Status</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
-            {courses.map((course) => (
-              <TableRow key={course.code}>
-                <TableCell>{course.code}</TableCell>
-                <TableCell>{course.name}</TableCell>
-                <TableCell>{course.status}</TableCell>
+            {students.map((s) => (
+              <TableRow key={s.id}>
+                <TableCell>{s.id}</TableCell>
+                <TableCell>{s.name}</TableCell>
+                <TableCell>{s.email}</TableCell>
+                <TableCell>{s.status}</TableCell>
                 <TableCell align="right">
                   <Button
                     size="small"
                     variant="outlined"
-                    onClick={() => handleEdit(course)}
+                    onClick={() => handleEdit(s)}
                   >
                     Edit
                   </Button>
@@ -127,27 +129,37 @@ function CoursesAdmin() {
 
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
         <DialogTitle>
-          {editing?.code ? "Edit Course" : "Add Course"}
+          {editing?.id ? "Edit Student" : "Add Student"}
         </DialogTitle>
         <DialogContent>
           <TextField
-            label="Course Code"
+            label="ID"
             fullWidth
             margin="dense"
-            value={editing?.code || ""}
+            value={editing?.id || ""}
             onChange={(e) =>
-              setEditing({ ...editing!, code: e.target.value })
+              setEditing({ ...editing!, id: e.target.value })
             }
-            disabled={!!courses.find((c) => c.code === editing?.code)}
+            disabled={!!students.find((s) => s.id === editing?.id)}
             required
           />
           <TextField
-            label="Course Name"
+            label="Full Name"
             fullWidth
             margin="dense"
             value={editing?.name || ""}
             onChange={(e) =>
               setEditing({ ...editing!, name: e.target.value })
+            }
+            required
+          />
+          <TextField
+            label="Email"
+            fullWidth
+            margin="dense"
+            value={editing?.email || ""}
+            onChange={(e) =>
+              setEditing({ ...editing!, email: e.target.value })
             }
             required
           />
@@ -173,4 +185,4 @@ function CoursesAdmin() {
   );
 }
 
-export default CoursesAdmin;
+export default StudentsAdmin;
