@@ -5,13 +5,22 @@ import {
   ListItemButton,
   ListItemText,
   Toolbar,
-} from '@mui/material';
-import { NavLink } from 'react-router-dom';
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { NavLink } from "react-router-dom";
 
 const drawerWidth = 240;
 const HEADER_HEIGHT = 64;
 
-export default function DrawerMenu() {
+export default function DrawerMenu({ isMobile }) {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  if (isMobile || isSmallScreen) {
+    return null;
+  }
+
   return (
     <Drawer
       variant="permanent"
@@ -20,7 +29,7 @@ export default function DrawerMenu() {
         flexShrink: 0,
         [`& .MuiDrawer-paper`]: {
           width: drawerWidth,
-          boxSizing: 'border-box',
+          boxSizing: "border-box",
           top: `${HEADER_HEIGHT}px`,
           height: `calc(100% - ${HEADER_HEIGHT}px)`,
         },

@@ -1,22 +1,11 @@
-import { Box } from '@mui/material';
-import Header from '../layout/Header';
-import DrawerMenu from '../layout/DrawerMenu';
-import AdminDesktopGuard from './AdminDesktopGuard';
+// src/components/admin/AdminLayout.tsx
+import { Box } from "@mui/material";
+import React from "react";
 
-interface Props {
-  children: React.ReactNode;
-}
-
-export default function AdminLayout({ children }: Props) {
+const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <AdminDesktopGuard>
-      <Header />
-      <Box sx={{ display: 'flex' }}>
-        <DrawerMenu />
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          {children}
-        </Box>
-      </Box>
-    </AdminDesktopGuard>
+    <Box sx={{ p: 3, minHeight: "100vh", bgcolor: "grey.100" }}>{children}</Box>
   );
-}
+};
+
+export default AdminLayout;
