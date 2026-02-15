@@ -1,0 +1,48 @@
+[33mb785a22[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mpeer_review_latest[m[33m, [m[1;31morigin/peer_review_latest[m[33m)[m Add dummy change to enable PR
+[33mb4b01d9[m[33m ([m[1;31morigin/peer_review_baseline[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mpeer_review_baseline[m[33m, [m[1;32mmain[m[33m)[m Final submission - admin frontend system
+[33m0fa8bb0[m final build
+[33m1062520[m Complete frontend admin system with theming, firestore and responsive design
+[33m07496c9[m Add gitignore
+[33m8609262[m Refactor App component layout with Box wrapper
+[33md0b77fc[m Refactor App component by removing unused imports
+[33m94fb55a[m Add additional routes for admin and user pages
+[33m5ae78db[m Implement message fetching and display in UserHome
+[33mb2682fd[m Update AdminHome.tsx
+[33m4e05f8d[m Implement DrawerMenu with navigation links
+[33mef4e6c8[m Format Header component code for consistency
+[33m31bec20[m Update MessagesAdmin.tsx
+[33ma84fce9[m Format Message interface for better readability
+[33m255df91[m Update MessageForm.tsx
+[33m4c61fbf[m Implement MessageForm with save functionality
+[33m09bcecd[m Implement Admin management interface with table
+[33m8048677[m Implement AdminForm with state management and validation
+[33m545da38[m Format Admin interface for better readability
+[33m426dd3f[m Refactor StudentsAdmin component state management
+[33mc584ff6[m Refactor StudentForm to use local state
+[33m5ef032d[m Update Student interface with courseIds and status labels
+[33mf9b567f[m Initialize courses in localStorage
+[33m9a3b8ba[m Add initialCourses data to initialData.ts
+[33mdb0f20e[m Refactor CoursesAdmin component state and rendering
+[33m1cfd786[m Refactor CourseForm to use separate state variables
+[33m95b515c[m Refactor isRequired and add course code validator
+[33me16d82d[m Refactor Course interface with new properties
+[33mc48de05[m Initialize storage service in main.tsx
+[33m6ea12a8[m Refactor storageService and add init method
+[33m9f35df2[m Refactor initialData to include degree requirements
+[33m665e96e[m Implement DegreeReqUser component with data fetching
+[33m22a16f6[m Implement DegreeReqAdmin component with data loading
+[33m2439146[m Refactor DegreeRequirement interface for localization
+[33m7b53c4d[m Update DegreeReqForm.tsx
+[33m7a5bf37[m Add DegreeRequirement interface to DegreeReqForm
+[33mef630bb[m Add student data loading to initial data setup
+[33m73dd816[m Implement StudentsAdmin component with student management
+[33m5e012d4[m Implement StudentForm with validation and submission
+[33ma0e276f[m Enhance Student interface with property comments
+[33mda6486a[m Organize imports and load initial data on mount
+[33mb9ed7ef[m Update initial data loading for courses
+[33m5a04462[m Implement CoursesAdmin component with course management
+[33mf19957e[m Implement CourseForm component with validation
+[33m48ff6c8[m Refactor storage service with additional methods
+[33m892f399[m Refactor Course interface with comments and formatting
+[33m53eb977[m Add files via upload
+[33m5b8ed8b[m Initial commit
