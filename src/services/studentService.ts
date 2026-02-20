@@ -1,5 +1,4 @@
-import { db } from '../backend/firebase';
-import {
+import {db } from "../services/firebase";import {
   collection,
   getDocs,
   addDoc,
