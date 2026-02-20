@@ -51,17 +51,16 @@ export default function StudentsAdmin() {
 
           <TableBody>
             {students.map((student) => (
-              <TableRow
-                key={student.id}
-                component={Link}
-                to={`/admin/students/${student.id}`}
-                hover
-                style={{
-                  textDecoration: "none",
-                  cursor: "pointer",
-                }}
-              >
-                <TableCell align="right">{student.name}</TableCell>
+              <TableRow key={student.id} hover>
+                <TableCell align="right">
+                  <Link
+                    to={`/admin/students/${student.id}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    {student.name}
+                  </Link>
+                </TableCell>
+
                 <TableCell align="right">{student.email}</TableCell>
                 <TableCell align="right">{student.idNumber}</TableCell>
               </TableRow>

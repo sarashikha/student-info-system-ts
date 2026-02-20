@@ -1,107 +1,90 @@
-import { useEffect, useState } from 'react';
-import { TextField, Button, Stack, Snackbar, MenuItem } from '@mui/material';
-import { Student } from '../models/Student';
-import { storageService } from '../services/storageService';
+import { useEffect, useState } from "react";
+import {
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper,
+  LinearProgress,
+  Button,
+  Dialog,
+} from "@mui/material";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../services/firebase";
+import { Link } from "react-router-dom";
+import StudentForm from "./StudentForm"
 
-interface Props {
-  selected?: Student;
-  onSave: () => void;
-}
-
-export default function StudentForm({ selected, onSave }: Props) {
-  const [id, setId] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'פעיל' | 'סיים'>('פעיל');
+export default function StudentsAdmin() {
+  const [students, setStudents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
 
-  const students = storageService.get<Student>('students');
-
-  const isDuplicate =
-    !selected && students.some(s => s.id === id);
-
-  const valid =
-    id.trim() !== '' &&
-    fullName.trim() !== '' &&
-    email.includes('@') &&
-    !isDuplicate;
-
   useEffect(() => {
-    if (selected) {
-      setId(selected.id);
-      setFullName(selected.fullName);
-      setEmail(selected.email);
-      setStatus(selected.status);
-    }
-  }, [selected]);
+    const unsubscribe = onSnapshot(collection(db, "students"), (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setStudents(data);
+      setLoading(false);
+    });
 
-  const save = () => {
-    let list = students;
+    return () => unsubscribe();
+  }, []);
 
-    if (selected) {
-      const i = list.findIndex(s => s.id === selected.id);
-      list[i] = { ...selected, fullName, email, status };
-    } else {
-      list.push({
-        id,
-        fullName,
-        email,
-        status,
-        courseIds: []
-      });
-    }
-
-    storageService.set('students', list);
-    setOpen(true);
-    onSave();
-  };
+  if (loading) return <LinearProgress />;
 
   return (
-    <Stack spacing={2}>
-      <TextField
-        label="תעודת זהות"
-        value={id}
-        required
-        disabled={!!selected}
-        error={isDuplicate}
-        helperText={isDuplicate ? 'ת״ז כבר קיימת' : ''}
-        onChange={e => setId(e.target.value)}
-      />
+    <Box p={4} dir="rtl">
+      <Typography variant="h4" textAlign="right" gutterBottom>
+        ניהול סטודנטים
+      </Typography>
 
-      <TextField
-        label="שם מלא"
-        value={fullName}
-        required
-        onChange={e => setFullName(e.target.value)}
-      />
-
-      <TextField
-        label="אימייל"
-        value={email}
-        required
-        onChange={e => setEmail(e.target.value)}
-      />
-
-      <TextField
-        select
-        label="סטטוס"
-        value={status}
-        onChange={e => setStatus(e.target.value as any)}
+      <Button
+        variant="contained"
+        sx={{ mb: 2 }}
+        onClick={() => setOpen(true)}
       >
-        <MenuItem value="פעיל">פעיל</MenuItem>
-        <MenuItem value="סיים">סיים</MenuItem>
-      </TextField>
-
-      <Button disabled={!valid} variant="contained" onClick={save}>
-        שמירה
+        הוסף סטודנט
       </Button>
 
-      <Snackbar
-        open={open}
-        autoHideDuration={3000}
-        message="סטודנט נשמר בהצלחה"
-        onClose={() => setOpen(false)}
-      />
-    </Stack>
+      <Paper sx={{ mt: 3 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell align="right">שם</TableCell>
+              <TableCell align="right">אימייל</TableCell>
+              <TableCell align="right">ת"ז</TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {students.map((student) => (
+              <TableRow key={student.id} hover>
+                <TableCell align="right">
+                  <Link
+                    to={`/admin/students/${student.id}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    {student.name}
+                  </Link>
+                </TableCell>
+                <TableCell align="right">{student.email}</TableCell>
+                <TableCell align="right">{student.idNumber}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <Box p={3} width={400}>
+          <StudentForm />
+        </Box>
+      </Dialog>
+    </Box>
   );
 }
