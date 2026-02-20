@@ -1,6 +1,6 @@
 // src/services/userService.ts ✅
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "../backend";
 import { User } from "../models/User";
 
 export const getUserById = async (id: string): Promise<User> => {

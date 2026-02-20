@@ -1,21 +1,26 @@
-import { collection, getDocs, addDoc, updateDoc, doc } from 'firebase/firestore';
-import { db } from '../firebase/firebase';
-import { Course } from '../models/Course';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
+import { db } from "./firebase";
 
-const collectionRef = collection(db, 'courses');
+const coursesCollection = collection(db, "courses");
 
-export const getCourses = async (): Promise<Course[]> => {
-  const snapshot = await getDocs(collectionRef);
-  return snapshot.docs.map(doc => ({
+export const getCourses = async () => {
+  const snapshot = await getDocs(coursesCollection);
+  return snapshot.docs.map((doc) => ({
     id: doc.id,
-    ...(doc.data() as Omit<Course, 'id'>),
+    ...doc.data(),
   }));
 };
 
-export const addCourse = async (course: Omit<Course, 'id'>) => {
-  await addDoc(collectionRef, course);
+export const addCourse = async (course: any) => {
+  return await addDoc(coursesCollection, course);
 };
 
-export const updateCourse = async (id: string, course: Partial<Course>) => {
-  await updateDoc(doc(db, 'courses', id), course);
+export const updateCourse = async (id: string, course: any) => {
+  const courseDoc = doc(db, "courses", id);
+  return await updateDoc(courseDoc, course);
+};
+
+export const deleteCourse = async (id: string) => {
+  const courseDoc = doc(db, "courses", id);
+  return await deleteDoc(courseDoc);
 };

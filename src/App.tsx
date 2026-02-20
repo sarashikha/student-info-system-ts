@@ -1,28 +1,21 @@
-import { useState } from 'react';
-import { ThemeProvider, CssBaseline, Box } from '@mui/material';
-import { lightTheme, darkTheme } from './theme/theme';
-import Header from './components/layout/Header';
-import DrawerMenu from './components/layout/DrawerMenu';
-import AppRoutes from './routes/AppRoutes';
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { useMemo, useState } from "react";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./routes/AppRoutes";
+import { createAppTheme } from "./theme";
 
-export default function App() {
+function App() {
   const [darkMode, setDarkMode] = useState(false);
+  const theme = useMemo(() => createAppTheme(darkMode), [darkMode]);
 
   return (
-    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-      <CssBaseline />
-
-      <Header
-        darkMode={darkMode}
-        onToggleDarkMode={() => setDarkMode(!darkMode)}
-      />
-
-      <Box sx={{ display: 'flex', mt: 8 }}>
-        <DrawerMenu />
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <AppRoutes />
-        </Box>
-      </Box>
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AppRoutes />
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
+
+export default App;
